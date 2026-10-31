@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านจักรยานและไลฟ์สไตล์ ดารายาร์ มัญจาคีรี | DARAYAR BICYCLE LIFESTYLE</title>
+    <meta name="description" content="ศูนย์จำหน่ายจักรยานแบรนด์ชั้นนำ จักรยานไฟฟ้า เครื่องใช้ไฟฟ้ามินิมอล และสายไฟเกรดวิศวกรรม อ.มัญจาคีรี จ.ขอนแก่น">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Kanit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        },
+                        accent: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for aesthetic enhancements */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .hero-pattern {
+            background-color: #0f172a;
+            background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+        .dbd-badge {
+            transition: all 0.3s ease;
+        }
+        .dbd-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                        D
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-xl leading-none text-slate-800">DARAYAR</h1>
+                        <span class="text-xs text-brand-600 font-medium tracking-wider">BICYCLE & LIFESTYLE</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#about" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">เกี่ยวกับเรา</a>
+                    <a href="#products" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">หมวดหมู่สินค้า</a>
+                    <a href="#services" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">บริการซ่อมบำรุง</a>
+                    <a href="#contact" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">ติดต่อเรา</a>
+                    <a href="https://line.me/R/ti/p/%40213njvrj" target="_blank" class="bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-full font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+                        <i class="fab fa-line text-lg"></i> สั่งซื้อสินค้า
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-brand-600 focus:outline-none p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#about" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50">เกี่ยวกับเรา</a>
+                <a href="#products" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50">หมวดหมู่สินค้า</a>
+                <a href="#services" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50">บริการซ่อมบำรุง</a>
+                <a href="#contact" class="block px-3 py-3 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50">ติดต่อเรา</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-pattern pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden relative">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <span class="inline-block py-1 px-3 rounded-full bg-brand-500/20 text-brand-100 text-sm font-semibold tracking-wider mb-4 border border-brand-500/30">
+                    ONE-STOP E-MOBILITY SERVICE
+                </span>
+                <h2 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                    หมวดสินค้านำเข้า <br class="hidden md:block"/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-accent">กับไลฟ์สไตล์ที่เป็นคุณ</span>
+                </h2>
+                <p class="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed font-light">
+                    ศูนย์จำหน่ายจักรยานแบรนด์ชั้นนำ สำหรับทุกคนในครอบครัว พร้อมพาหนะไฟฟ้า<br class="hidden md:block">
+                    เครื่องใช้ไฟฟ้ามินิมอล และอุปกรณ์สายไฟระบบ DC มาตรฐานอุตสาหกรรม
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#products" class="bg-brand-600 hover:bg-brand-500 text-white px-8 py-4 rounded-full font-medium text-lg transition-all shadow-lg hover:shadow-brand-500/30 flex items-center justify-center gap-2">
+                        เลือกดูสินค้าทั้งหมด <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="tel:0840148961" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-8 py-4 rounded-full font-medium text-lg transition-all backdrop-blur-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-phone-alt"></i> โทรสอบถามด่วน
+                    </a>
+                </div>
+                
+                <div class="mt-12 flex items-center justify-center gap-6 text-gray-400 text-sm font-medium">
+                    <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i> ตรวจเช็กระบบไฟก่อนส่ง</div>
+                    <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i> มีหน้าร้านชัดเจน 100%</div>
+                    <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-400"></i> ส่งด่วนทั่วประเทศ</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section / Vision -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <div class="lg:w-1/2">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img src="https://placehold.co/800x600/0c4a6e/ffffff?text=DARAYAR+SHOP" alt="ร้านจักรยานดารายาร์" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-700">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white">
+                            <p class="font-medium text-lg">พิกัดจุดนัดพบของคนรักสุขภาพ</p>
+                            <p class="text-sm opacity-80">อ.มัญจาคีรี จ.ขอนแก่น</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h3 class="text-brand-600 font-semibold tracking-wider uppercase mb-2">เกี่ยวกับเรา</h3>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">ผู้เชี่ยวชาญด้าน E-Bike และไลฟ์สไตล์การปั่นจักรยาน</h2>
+                    <p class="text-gray-600 mb-6 leading-relaxed text-lg">
+                        เรื่องราวของ <strong>DALAYAR</strong> คือแรงบันดาลใจที่พิสูจน์ว่าธุรกิจที่ยิ่งใหญ่เริ่มต้นจากความตั้งใจที่ดีได้เสมอ เราเริ่มต้นจากการต้องการท้าทายตลาดสกู๊ตเตอร์ไฟฟ้าที่ราคาสูงเกินจริง และขาดบริการหลังการขาย
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        ปัจจุบันเราคือผู้นำเข้าและจัดจำหน่ายจักรยานมาตรฐานสากล (LA Bicycle, TURBO, JUMBO) และพันธมิตรเชิงกลยุทธ์ด้านแบตเตอรี่ลิเธียม (BatteryDaraya) ที่ผ่านการรับรองมาตรฐานสากล (ISO, CE, UL)
+                    </p>
+                    <blockquote class="bg-brand-50 border-l-4 border-brand-500 p-6 rounded-r-xl italic text-gray-700 font-medium">
+                        "เราไม่หยุดแค่เอื้อมว่าพอใช้ได้ เพราะเราเกิดมาที่จะยอดเยี่ยม"
+                        <footer class="mt-2 text-sm text-gray-500 not-italic font-semibold">— คุณซอวิน มินยันท์ (CEO)</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Categories -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h3 class="text-brand-600 font-semibold tracking-wider uppercase mb-2">หมวดหมู่สินค้า</h3>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900">สินค้าคุณภาพ ตอบโจทย์ทุกไลฟ์สไตล์</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Category 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all group border border-gray-100">
+                    <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform group-hover:bg-brand-600 group-hover:text-white">
+                        <i class="fas fa-bicycle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">จักรยานทั่วไป & ครอบครัว</h3>
+                    <p class="text-gray-600 text-sm mb-4">จักรยานแม่บ้าน, จักรยานเด็ก 12" 16" 18" แบรนด์ LA, TURBO, JUMBO</p>
+                </div>
+                
+                <!-- Category 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all group border border-gray-100">
+                    <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform group-hover:bg-brand-600 group-hover:text-white">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">จักรยานไฟฟ้า & สกู๊ตเตอร์</h3>
+                    <p class="text-gray-600 text-sm mb-4">ยานพาหนะพลังงานทางเลือก พร้อมประกอบและตั้งศูนย์ 100% ก่อนส่ง</p>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all group border border-gray-100">
+                    <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform group-hover:bg-brand-600 group-hover:text-white">
+                        <i class="fas fa-battery-full"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">แบตเตอรี่ลิเธียม & สายไฟ DC</h3>
+                    <p class="text-gray-600 text-sm mb-4">แบตเตอรี่ประกอบ, กล่องควบคุมมอเตอร์ (Controller), สายไฟนำกระแสสูงทนไฟ</p>
+                </div>
+
+                <!-- Category 4 -->
+                <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all group border border-gray-100">
+                    <div class="w-16 h-16 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform group-hover:bg-brand-600 group-hover:text-white">
+                        <i class="fas fa-blender"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">เครื่องใช้ไฟฟ้ามินิมอล</h3>
+                    <p class="text-gray-600 text-sm mb-4">สินค้านำเข้า เครื่องใช้ไฟฟ้าภายในบ้านดีไซน์เรียบหรู คุ้มค่าราคา</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="https://shop.line.me/@213njvrj" target="_blank" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-brand-700 bg-brand-100 hover:bg-brand-200 transition-colors">
+                    ดูแคตตาล็อกสินค้าทั้งหมดบน LINE SHOPPING
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section id="services" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="p-10 lg:p-16 flex flex-col justify-center">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-300 text-sm font-semibold w-max mb-6">
+                            <i class="fas fa-tools"></i> บริการหลังการขาย
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">One-Stop E-Mobility Service</h2>
+                        <p class="text-gray-300 mb-8 leading-relaxed">
+                            ศูนย์บริการแบบครบวงจรที่เชี่ยวชาญด้านระบบยานยนต์ไฟฟ้าขนาดเล็กและจักรยาน เราไม่ได้แค่ขาย แต่เราดูแลคุณตลอดการใช้งาน
+                        </p>
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <span class="text-gray-300"><strong>บริการซ่อมและตรวจเช็กระบบไฟฟ้า:</strong> แก้ไขอาการระบบไฟรวน มอเตอร์ไม่ทำงาน ตรวจเช็คกล่องคอนโทรลเลอร์</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <span class="text-gray-300"><strong>ออกแบบและผลิตแบตเตอรี่:</strong> ประกอบแบตเตอรี่ลิเธียมไอออนเพื่อเพิ่มระยะทางการวิ่ง (SpotWeld Pro)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fas fa-check-circle text-accent mt-1"></i>
+                                <span class="text-gray-300"><strong>ประกอบและสแกนความปลอดภัย 100%:</strong> เติมลม ตั้งเบรก หยอดน้ำมัน พร้อมปั่นทันทีเมื่อเปิดกล่อง</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="relative h-64 lg:h-auto bg-slate-800">
+                        <!-- Placeholder for service image -->
+                        <img src="https://placehold.co/600x800/1e293b/0ea5e9?text=E-Mobility+Service" alt="บริการซ่อมบำรุง" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-overlay">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Location -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-brand-600 font-semibold tracking-wider uppercase mb-2">พิกัดหน้าร้านและการติดต่อ</h3>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-8">แวะมาทดลองปั่นได้ที่ มัญจาคีรี ขอนแก่น</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-xl shrink-0">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 text-lg">ร้านจักรยาน DARAYAR</h4>
+                                <p class="text-gray-600 mt-1">229 ถนนเกษตรพัฒนา ตำบลกุดเค้า <br>อำเภอมัญจาคีรี จังหวัดขอนแก่น 40160</p>
+                                <p class="text-sm text-brand-600 font-medium mt-2">เปิดให้บริการทุกวัน 09:00 - 18:00 น.</p>
+                            </div>
+                        </div>
+
+                        <a href="tel:0840148961" class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:border-brand-300 transition-colors group">
+                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center text-xl shrink-0 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="flex flex-col justify-center h-12">
+                                <h4 class="font-bold text-gray-900 text-lg">สายด่วนโทร</h4>
+                                <p class="text-brand-600 font-medium">084-0148961</p>
+                            </div>
+                        </a>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="https://line.me/R/ti/p/%40213njvrj" target="_blank" class="flex flex-col items-center justify-center p-4 bg-[#00B900] text-white rounded-xl shadow-sm hover:bg-[#009900] transition-colors">
+                                <i class="fab fa-line text-3xl mb-2"></i>
+                                <span class="font-medium">LINE: @213njvrj</span>
+                            </a>
+                            <a href="https://m.me/Aredint" target="_blank" class="flex flex-col items-center justify-center p-4 bg-[#0084FF] text-white rounded-xl shadow-sm hover:bg-[#006bce] transition-colors">
+                                <i class="fab fa-facebook-messenger text-3xl mb-2"></i>
+                                <span class="font-medium">Inbox m.me/Aredint</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Placeholder -->
+                <div class="bg-white p-2 rounded-2xl shadow-lg border border-gray-100 min-h-[400px] flex items-center justify-center relative overflow-hidden group">
+                    <img src="https://placehold.co/800x600/e2e8f0/64748b?text=Google+Maps+Location" class="w-full h-full object-cover rounded-xl" alt="Map">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <a href="https://maps.app.goo.gl/uaSryHJt3QmnB51u8?g_st=ac" target="_blank" class="bg-white text-gray-900 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2">
+                            <i class="fas fa-directions text-brand-600"></i> เปิดนำทาง (Google Maps)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 pt-16 pb-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+                <!-- Brand & Motto -->
+                <div class="md:col-span-4 lg:col-span-5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 bg-brand-600 rounded flex items-center justify-center text-white font-bold text-lg">
+                            D
+                        </div>
+                        <h1 class="font-bold text-xl text-white">DARAYAR <span class="text-sm font-normal text-gray-400">Shop</span></h1>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6 pr-4">
+                        DALAYAR BICYCLE LIFESTYLE COMPANY LIMITED <br>
+                        มั่นใจในคุณภาพและการส่งมอบความอบอุ่นในครอบครัว "เราตีค่าคุณภาพสินค้า มากกว่าราคา หากสินค้าไม่มีคุณภาพมันก็ไม่มีค่าของราคา"
+                    </p>
+                    
+                    <!-- เครื่องหมายรับรอง DBD (Official Code Inserted Here) -->
+                    <div class="inline-block bg-white p-2 rounded-xl dbd-badge border border-gray-200">
+                        <a href='https://dbdregistered.dbd.go.th/api/public/shopinfoReg?param=1021F3B8A2C2674141EE6FA6B80D8C67BB546E042BBA5B1996A68E7DDEE566FC' target="_blank">
+                            <img src='https://dbdregistered.dbd.go.th/api/public/bannerreg?param=1021F3B8A2C2674141EE6FA6B80D8C67BB546E042BBA5B1996A68E7DDEE566FC' alt="DBD Registered" class="h-12 w-auto object-contain rounded" />
+                        </a>
+                    </div>
+
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="md:col-span-4 lg:col-span-3">
+                    <h4 class="text-white font-semibold mb-4 tracking-wider uppercase text-sm">ลิงก์ด่วน</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors text-sm">เกี่ยวกับเรา</a></li>
+                        <li><a href="#products" class="text-gray-400 hover:text-white transition-colors text-sm">แคตตาล็อกสินค้า</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors text-sm">บริการของเรา</a></li>
+                        <li><a href="https://shop.line.me/@213njvrj" target="_blank" class="text-gray-400 hover:text-white transition-colors text-sm">LINE Shopping</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="md:col-span-4 lg:col-span-4">
+                    <h4 class="text-white font-semibold mb-4 tracking-wider uppercase text-sm">ช่องทางการติดต่อ</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3 text-gray-400 text-sm">
+                            <i class="fas fa-envelope mt-1 text-brand-500"></i> executive@darayar.online.co
+                        </li>
+                        <li class="flex items-start gap-3 text-gray-400 text-sm">
+                            <i class="fas fa-phone-alt mt-1 text-brand-500"></i> 084-0148961
+                        </li>
+                        <li class="flex items-start gap-3 text-gray-400 text-sm">
+                            <i class="fas fa-map-marker-alt mt-1 text-brand-500"></i> 229 ถ.เกษตรพัฒนา ต.กุดเค้า อ.มัญจาคีรี จ.ขอนแก่น 40160
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm text-center md:text-left">
+                    &copy; 2026 DALAYAR BICYCLE LIFESTYLE COMPANY. All Rights Reserved.
+                </p>
+                <div class="flex space-x-4 text-sm text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">นโยบายความเป็นส่วนตัว</a>
+                    <span>|</span>
+                    <a href="#" class="hover:text-white transition-colors">เงื่อนไขการใช้บริการ</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button (LINE) -->
+    <a href="https://line.me/R/ti/p/%40213njvrj" target="_blank" class="fixed bottom-6 right-6 w-14 h-14 bg-[#00B900] text-white rounded-full shadow-2xl flex items-center justify-center text-3xl hover:scale-110 hover:bg-[#009900] transition-all z-50 animate-bounce">
+        <i class="fab fa-line"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
