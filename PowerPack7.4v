@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerPack 18650 - Darayar.online</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js and OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': '#00d2ff',
+                        'brand-dark': '#0088ff',
+                        'dark-bg': '#0f172a',
+                        'dark-surface': '#1e293b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Kanit', 'sans-serif'], // Added Thai font support
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&family=Kanit:wght@300;400;500;600&display=swap');
+        
+        body {
+            background-color: #0b1120;
+            color: #f8fafc;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Darayar Glass Style */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            border-color: rgba(0, 210, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* 3D Canvas wrapper */
+        #canvas-container {
+            cursor: grab;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+        #canvas-container:active {
+            cursor: grabbing;
+        }
+
+        #battery-fill {
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Typography for details */
+        .prose h2 { color: #f8fafc; font-size: 1.5rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 1px solid #334155; padding-bottom: 0.5rem;}
+        .prose h3 { color: #cbd5e1; font-size: 1.25rem; font-weight: 500; margin-top: 1.5rem; margin-bottom: 0.75rem;}
+        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.5rem; color: #94a3b8;}
+        .prose li { margin-bottom: 0.5rem;}
+        .prose p { margin-bottom: 1rem; line-height: 1.7; color: #cbd5e1;}
+        .prose table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+        .prose th, .prose td { border: 1px solid #334155; padding: 0.75rem; text-align: left; }
+        .prose th { background-color: #1e293b; color: #f8fafc; }
+        .prose td { color: #94a3b8; }
+    </style>
+</head>
+<body class="font-sans flex flex-col min-h-screen">
+
+    <!-- Darayar.online Navigation -->
+    <header class="sticky top-0 z-50 glass-card border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-layer-group text-brand text-2xl"></i>
+                    <span class="font-bold text-xl tracking-wide">Darayar<span class="text-brand font-light">.online</span></span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-gray-300 hover:text-white transition">หน้าหลัก</a>
+                    <a href="#" class="text-brand font-medium border-b-2 border-brand pb-1">สินค้าทั้งหมด</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition">บทความ/DIY</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition">ติดต่อเรา</a>
+                </nav>
+
+                <!-- Icons -->
+                <div class="flex items-center gap-4">
+                    <button class="text-gray-400 hover:text-white transition">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    <button class="text-gray-400 hover:text-white transition relative">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">1</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full">
+        <div class="text-sm text-gray-400">
+            <a href="#" class="hover:text-brand transition">หน้าหลัก</a> &gt; 
+            <a href="#" class="hover:text-brand transition">หมวดหมู่อิเล็กทรอนิกส์</a> &gt; 
+            <span class="text-gray-200">แบตเตอรี่ PowerPack 18650 (7.4V)</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full">
+        
+        <!-- Top Section: 3D Model & Interactive UI -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            
+            <!-- Left: 3D Showcase -->
+            <div class="glass-card rounded-2xl overflow-hidden relative border border-white/10 flex flex-col h-[500px] lg:h-[600px]">
+                <div class="absolute top-4 left-4 z-10 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 text-xs font-medium text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-cube text-brand"></i> 3D Interactive Preview
+                </div>
+                <!-- Interactive 3D Canvas -->
+                <div id="canvas-container" class="w-full h-full"></div>
+                <div class="absolute bottom-4 right-4 z-10 pointer-events-none text-xs text-gray-400 bg-black/60 px-3 py-2 rounded-lg border border-gray-700 backdrop-blur-sm shadow-lg">
+                    <i class="fa-solid fa-hand-pointer mr-1"></i> ลากเพื่อหมุน | <i class="fa-solid fa-magnifying-glass-plus ml-1 mr-1"></i> เลื่อนลูกกลิ้งเพื่อซูม
+                </div>
+            </div>
+
+            <!-- Right: Product Info & Simulation Dashboard -->
+            <div class="flex flex-col h-full">
+                <!-- Header Info -->
+                <div class="mb-6">
+                    <div class="inline-block px-2 py-1 bg-blue-500/20 text-brand text-xs font-bold rounded mb-3 border border-blue-500/30">LITHIUM ION / 2S1P</div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">แบตเตอรี่ PowerPack <span class="text-brand">18650</span></h1>
+                    <p class="text-gray-400 text-sm mb-4">7.4V 2000mAh High-Discharge Pack พร้อมหัว JST-SYP</p>
+                    <div class="flex items-end gap-3 mb-2">
+                        <span class="text-4xl font-bold text-white">฿350.00</span>
+                        <span class="text-gray-500 line-through text-lg">฿450.00</span>
+                    </div>
+                    <div class="flex items-center text-sm text-green-400 font-medium">
+                        <i class="fa-solid fa-check-circle mr-1"></i> สินค้าพร้อมส่ง (มีในสต็อก 45 ชิ้น)
+                    </div>
+                </div>
+
+                <!-- Simulation Dashboard (Glass Panel) -->
+                <div class="glass-card rounded-xl p-5 mb-6 border border-brand/20 shadow-[0_0_20px_rgba(0,210,255,0.1)]">
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+                        <h3 class="font-semibold text-gray-200"><i class="fa-solid fa-microchip text-brand mr-2"></i>ระบบทดสอบการทำงานจำลอง</h3>
+                        <div class="flex items-center gap-2">
+                            <div id="status-dot" class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]"></div>
+                            <span id="status-text" class="text-xs font-bold tracking-wider uppercase text-blue-400">สแตนด์บาย</span>
+                        </div>
+                    </div>
+
+                    <!-- Battery Bar -->
+                    <div class="mb-5">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-xs text-gray-400">สถานะแบตเตอรี่ (SOC)</span>
+                            <span id="ui-percentage" class="text-sm font-mono font-bold text-white">50.0%</span>
+                        </div>
+                        <div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden p-0.5 border border-gray-700">
+                            <div id="battery-fill" class="h-full bg-brand rounded-full w-[50%] relative overflow-hidden">
+                                <div class="absolute inset-0 bg-white/20 w-full animate-[pulse_2s_ease-in-out_infinite]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Telemetry Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+                        <div class="stat-box rounded-lg p-3 text-center">
+                            <div class="text-[10px] text-gray-400 mb-1"><i class="fa-solid fa-bolt text-yellow-400"></i> แรงดัน (V)</div>
+                            <div class="font-mono text-lg font-semibold text-white" id="ui-voltage">7.40</div>
+                        </div>
+                        <div class="stat-box rounded-lg p-3 text-center">
+                            <div class="text-[10px] text-gray-400 mb-1"><i class="fa-solid fa-battery-half text-green-400"></i> ความจุ (mAh)</div>
+                            <div class="font-mono text-lg font-semibold text-white" id="ui-capacity">1000</div>
+                        </div>
+                        <div class="stat-box rounded-lg p-3 text-center">
+                            <div class="text-[10px] text-gray-400 mb-1"><i class="fa-solid fa-temperature-half text-red-400"></i> อุณหภูมิ (°C)</div>
+                            <div class="font-mono text-lg font-semibold text-white" id="ui-temp">25.0</div>
+                        </div>
+                        <div class="stat-box rounded-lg p-3 text-center">
+                            <div class="text-[10px] text-gray-400 mb-1"><i class="fa-solid fa-wave-square text-purple-400"></i> กระแส (A)</div>
+                            <div class="font-mono text-lg font-semibold text-white" id="ui-current">0.0</div>
+                        </div>
+                    </div>
+
+                    <!-- Simulation Controls -->
+                    <div class="flex gap-2">
+                        <button id="btn-charge" class="flex-1 bg-green-500/20 hover:bg-green-500/40 text-green-400 border border-green-500/50 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plug"></i> จำลองชาร์จไฟ
+                        </button>
+                        <button id="btn-discharge" class="flex-1 bg-red-500/20 hover:bg-red-500/40 text-red-400 border border-red-500/50 py-2 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-power-off"></i> จำลองจ่ายไฟ
+                        </button>
+                        <button id="btn-stop" class="w-12 bg-gray-700/50 hover:bg-gray-600 border border-gray-500/50 rounded-lg transition-colors flex items-center justify-center text-white">
+                            <i class="fa-solid fa-stop"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart Action -->
+                <div class="mt-auto flex gap-4 items-center">
+                    <div class="flex items-center border border-gray-600 rounded-lg overflow-hidden h-12 bg-dark-bg">
+                        <button class="px-4 text-gray-400 hover:text-white hover:bg-gray-800 h-full transition">-</button>
+                        <input type="text" value="1" class="w-12 text-center bg-transparent text-white font-medium focus:outline-none" readonly>
+                        <button class="px-4 text-gray-400 hover:text-white hover:bg-gray-800 h-full transition">+</button>
+                    </div>
+                    <button class="flex-1 bg-gradient-to-r from-brand-dark to-brand hover:from-brand hover:to-brand-dark text-white font-bold py-3 rounded-lg shadow-[0_0_15px_rgba(0,210,255,0.4)] transition-all transform hover:scale-[1.02]">
+                        <i class="fa-solid fa-cart-plus mr-2"></i> เพิ่มลงตะกร้า
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Section -->
+        <div class="glass-card rounded-2xl p-6 lg:p-10 mb-12">
+            <div class="prose max-w-none">
+                <h2>รายละเอียดสินค้า (Product Description)</h2>
+                
+                <p>
+                    <strong>PowerPack 18650</strong> แบตเตอรี่แพ็คคุณภาพสูงที่ประกอบขึ้นจากเซลล์ Lithium-Ion 18650 ทรงประสิทธิภาพ 
+                    จัดเรียงแบบ <strong>2S1P</strong> ให้แรงดันไฟฟ้าคงที่ <strong>7.4V</strong> และความจุเต็มพิกัด <strong>2000mAh</strong> 
+                    มาพร้อมวงจรจัดการแบตเตอรี่ (BMS) ภายในตัว เพื่อความปลอดภัยสูงสุดในการใช้งาน เหมาะอย่างยิ่งสำหรับสาย DIY, หุ่นยนต์, 
+                    รถบังคับ (RC) และโปรเจกต์อิเล็กทรอนิกส์ทุกชนิด
+                </p>
+
+                <h3>✨ จุดเด่นของสินค้า (Key Features)</h3>
+                <ul>
+                    <li><strong>High Performance:</strong> จ่ายไฟนิ่ง เสถียร ตอบสนองการดึงกระแส (Current Draw) ได้ดีเยี่ยม</li>
+                    <li><strong>Built-in BMS:</strong> มีแผงวงจรควบคุมด้านบน ป้องกันการชาร์จไฟเกิน (Overcharge), การดึงกระแสไฟเกิน (Over-discharge) และไฟฟ้าลัดวงจร (Short Circuit)</li>
+                    <li><strong>Ready to Use:</strong> ประกอบสำเร็จรูปพร้อมหุ้มฟิล์ม PVC หนา (Shrink Wrap) กันกระแทกและรอยขีดข่วน</li>
+                    <li><strong>Universal Connector:</strong> มาพร้อมหัวปลั๊กแดง JST-SYP 2-Pin มาตรฐาน เชื่อมต่อง่าย ใช้งานได้ทันที</li>
+                </ul>
+
+                <h3>📊 ข้อมูลทางเทคนิค (Hardware Specifications)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>หัวข้อ</th>
+                            <th>รายละเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ชนิดเซลล์ (Cell Type)</td><td>18650 Li-ion</td></tr>
+                        <tr><td>การจัดเรียง (Configuration)</td><td>2S1P (2 Cells in Series, 1 in Parallel)</td></tr>
+                        <tr><td>ความจุ (Capacity)</td><td>2000 mAh</td></tr>
+                        <tr><td>แรงดันไฟฟ้าปกติ (Nominal Voltage)</td><td>7.4V</td></tr>
+                        <tr><td>แรงดันชาร์จเต็ม (Max Charge Voltage)</td><td>8.4V</td></tr>
+                        <tr><td>แรงดันตัดการทำงาน (Discharge Cut-off)</td><td>6.0V</td></tr>
+                        <tr><td>หัวเชื่อมต่อ (Connector)</td><td>JST-SYP 2-Pin (ปลั๊กแดง)</td></tr>
+                        <tr><td>ขนาดโดยประมาณ (Dimensions)</td><td>กว้าง 38 มม. x ยาว 67 มม. x หนา 19 มม.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>🎯 เหมาะสำหรับนำไปใช้งาน (Applications)</h3>
+                <ul>
+                    <li>รถบังคับวิทยุ (RC Cars) และเรือบังคับ</li>
+                    <li>หุ่นยนต์และโปรเจกต์เมคเกอร์ (Robotics & DIY Projects)</li>
+                    <li>บอร์ดไมโครคอนโทรลเลอร์ (Arduino, Raspberry Pi ที่ผ่านวงจร Step-down)</li>
+                    <li>อุปกรณ์อิเล็กทรอนิกส์พกพาที่ต้องการกำลังไฟ 7.4V</li>
+                </ul>
+
+                <h3>⚠️ ข้อควรระวังในการใช้งาน (Safety Warning)</h3>
+                <p class="text-red-400">
+                    ห้ามใช้งานหรือเก็บรักษาในที่ที่มีอุณหภูมิสูงกว่า 60°C • ควรใช้เครื่องชาร์จ (Charger) ที่รองรับแบตเตอรี่ Li-ion 7.4V (2S) โดยเฉพาะ • 
+                    ห้ามเจาะ ทุบ หรือดัดแปลงสภาพแบตเตอรี่เด็ดขาด • หากแบตเตอรี่มีอาการบวม หรือสายไฟชำรุด ควรหยุดใช้งานทันที
+                </p>
+                <p class="text-sm text-gray-500 mt-4 border-t border-gray-700 pt-4">
+                    *รับประกันสินค้า 1 เดือน นับจากวันที่ได้รับสินค้า (เงื่อนไขการรับประกัน: สินค้าต้องไม่ชำรุดจากการดัดแปลง แตกหัก หรือไหม้จากการชาร์จผิดวิธี)*
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg border-t border-white/10 pt-12 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-layer-group text-brand text-xl"></i>
+                        <span class="font-bold text-lg tracking-wide text-white">Darayar<span class="text-brand font-light">.online</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm w-3/4 mb-4">
+                        แหล่งรวมอุปกรณ์อิเล็กทรอนิกส์ อะไหล่หุ่นยนต์ และชุดคิท DIY สำหรับเมคเกอร์ สินค้าคุณภาพ จัดส่งไว มั่นใจได้ 100%
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand hover:text-white transition"><i class="fa-brands fa-line"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">หมวดหมู่สินค้า</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand transition">แบตเตอรี่ & ที่ชาร์จ</a></li>
+                        <li><a href="#" class="hover:text-brand transition">ไมโครคอนโทรลเลอร์</a></li>
+                        <li><a href="#" class="hover:text-brand transition">เซ็นเซอร์ & โมดูล</a></li>
+                        <li><a href="#" class="hover:text-brand transition">มอเตอร์ & โครงสร้าง</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">บริการลูกค้า</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand transition">วิธีการสั่งซื้อ</a></li>
+                        <li><a href="#" class="hover:text-brand transition">การจัดส่งสินค้า</a></li>
+                        <li><a href="#" class="hover:text-brand transition">นโยบายการรับประกัน</a></li>
+                        <li><a href="#" class="hover:text-brand transition">ติดต่อเรา</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-xs text-gray-500">
+                &copy; 2026 Darayar.online. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts (Battery Simulation & 3D Model) -->
+    <script>
+        /**
+         * 1. BATTERY SIMULATION LOGIC
+         */
+        const batterySim = {
+            maxCapacity: 2000,
+            currentCapacity: 1000,
+            maxVoltage: 8.4,
+            minVoltage: 6.0,
+            nominalVoltage: 7.4,
+            baseTemp: 25.0,
+            currentTemp: 25.0,
+            chargeRate: 15,     // mAh per tick
+            dischargeRate: 20,  // mAh per tick
+            state: 'idle',      // 'idle', 'charging', 'discharging'
+            currentDraw: 0,
+            
+            getVoltage: function() {
+                const percentage = this.currentCapacity / this.maxCapacity;
+                const v = this.minVoltage + (percentage * (this.maxVoltage - this.minVoltage));
+                return v.toFixed(2);
+            },
+            
+            getPercentage: function() {
+                return ((this.currentCapacity / this.maxCapacity) * 100).toFixed(1);
+            },
+            
+            tick: function() {
+                if (this.state === 'charging') {
+                    this.currentDraw = -2.0; 
+                    if (this.currentCapacity < this.maxCapacity) {
+                        this.currentCapacity += this.chargeRate;
+                        this.currentTemp = Math.min(this.currentTemp + 0.15, 35.0); 
+                    } else {
+                        this.currentCapacity = this.maxCapacity;
+                        this.state = 'idle'; 
+                    }
+                } else if (this.state === 'discharging') {
+                    this.currentDraw = 3.5; 
+                    if (this.currentCapacity > 0) {
+                        this.currentCapacity -= this.dischargeRate;
+                        this.currentTemp = Math.min(this.currentTemp + 0.25, 48.0); 
+                    } else {
+                        this.currentCapacity = 0;
+                        this.state = 'idle';
+                    }
+                } else {
+                    this.currentDraw = 0.0;
+                    if (this.currentTemp > this.baseTemp) {
+                        this.currentTemp -= 0.2;
+                    }
+                    if (this.currentTemp < this.baseTemp) this.currentTemp = this.baseTemp;
+                }
+                
+                updateUI();
+            }
+        };
+
+        /**
+         * 2. UI UPDATE LOGIC
+         */
+        const uiVoltage = document.getElementById('ui-voltage');
+        const uiCapacity = document.getElementById('ui-capacity');
+        const uiPercentage = document.getElementById('ui-percentage');
+        const uiTemp = document.getElementById('ui-temp');
+        const uiCurrent = document.getElementById('ui-current');
+        const batteryFill = document.getElementById('battery-fill');
+        const statusText = document.getElementById('status-text');
+        const statusDot = document.getElementById('status-dot');
+
+        let bmsIndicatorMaterial; // Defined globally for 3D sync
+
+        function updateUI() {
+            uiVoltage.innerText = batterySim.getVoltage();
+            uiCapacity.innerText = Math.round(batterySim.currentCapacity);
+            const perc = batterySim.getPercentage();
+            uiPercentage.innerText = `${perc}%`;
+            batteryFill.style.width = `${perc}%`;
+            uiTemp.innerText = batterySim.currentTemp.toFixed(1);
+            uiCurrent.innerText = Math.abs(batterySim.currentDraw).toFixed(1);
+
+            if (batterySim.state === 'charging') {
+                statusText.innerText = 'กำลังชาร์จ...';
+                statusText.className = 'text-xs font-bold tracking-wider uppercase text-green-400';
+                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse';
+                batteryFill.className = 'h-full rounded-full relative overflow-hidden bg-green-500';
+                if(bmsIndicatorMaterial) bmsIndicatorMaterial.color.setHex(0x00ff00);
+            } else if (batterySim.state === 'discharging') {
+                statusText.innerText = 'กำลังจ่ายไฟ';
+                statusText.className = 'text-xs font-bold tracking-wider uppercase text-red-400';
+                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse';
+                
+                if (perc > 50) batteryFill.className = 'h-full rounded-full relative overflow-hidden bg-yellow-500';
+                else if (perc > 20) batteryFill.className = 'h-full rounded-full relative overflow-hidden bg-orange-500';
+                else batteryFill.className = 'h-full rounded-full relative overflow-hidden bg-red-600 animate-pulse';
+                
+                if(bmsIndicatorMaterial) bmsIndicatorMaterial.color.setHex(0xff0000);
+            } else {
+                statusText.innerText = 'สแตนด์บาย';
+                statusText.className = 'text-xs font-bold tracking-wider uppercase text-blue-400';
+                statusDot.className = 'w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_8px_#3b82f6]';
+                
+                if (perc < 20) batteryFill.className = 'h-full rounded-full relative overflow-hidden bg-red-500';
+                else batteryFill.className = 'h-full rounded-full relative overflow-hidden bg-brand';
+                
+                if(bmsIndicatorMaterial) bmsIndicatorMaterial.color.setHex(0x00d2ff);
+            }
+        }
+
+        document.getElementById('btn-charge').addEventListener('click', () => {
+            if(batterySim.currentCapacity < batterySim.maxCapacity) batterySim.state = 'charging';
+        });
+        document.getElementById('btn-discharge').addEventListener('click', () => {
+            if(batterySim.currentCapacity > 0) batterySim.state = 'discharging';
+        });
+        document.getElementById('btn-stop').addEventListener('click', () => {
+            batterySim.state = 'idle';
+        });
+
+        setInterval(() => { batterySim.tick(); }, 100);
+
+        /**
+         * 3. THREE.JS 3D VISUALIZATION
+         */
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+
+        // Camera setup based on container size
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+        camera.position.set(10, 6, 12); // Slightly lower angle for product view
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // Controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxDistance = 25;
+        controls.minDistance = 5;
+        controls.target.set(0, 3, 0); 
+        // Important: Disable panning to prevent scrolling issues on mobile when touching outside model
+        // controls.enablePan = false;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        dirLight.position.set(10, 20, 10);
+        dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 1024;
+        dirLight.shadow.mapSize.height = 1024;
+        scene.add(dirLight);
+
+        const blueLight = new THREE.PointLight(0x00d2ff, 1.5, 20);
+        blueLight.position.set(-5, 5, 5);
+        scene.add(blueLight);
+
+        // --- Model Construction ---
+        const batteryPack = new THREE.Group();
+        
+        const cellGeometry = new THREE.CylinderGeometry(0.9, 0.9, 6.5, 32);
+        const cellMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.9, roughness: 0.2 });
+
+        const cell1 = new THREE.Mesh(cellGeometry, cellMaterial);
+        cell1.position.set(-0.92, 3.25, 0);
+        cell1.castShadow = true;
+        batteryPack.add(cell1);
+
+        const cell2 = new THREE.Mesh(cellGeometry, cellMaterial);
+        cell2.position.set(0.92, 3.25, 0);
+        cell2.castShadow = true;
+        batteryPack.add(cell2);
+        
+        const capGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.2, 16);
+        const posCap1 = new THREE.Mesh(capGeometry, cellMaterial);
+        posCap1.position.set(-0.92, 6.6, 0);
+        batteryPack.add(posCap1);
+        
+        const posCap2 = new THREE.Mesh(capGeometry, cellMaterial);
+        posCap2.position.set(0.92, 6.6, 0);
+        batteryPack.add(posCap2);
+
+        // Shrink Wrap (Blue)
+        const wrapGeometry = new THREE.BoxGeometry(3.8, 6.7, 1.95);
+        const wrapMaterial = new THREE.MeshPhysicalMaterial({
+            color: 0x0066ff,
+            transparent: true,
+            opacity: 0.85,
+            roughness: 0.3,
+            transmission: 0.2,
+            thickness: 0.1
+        });
+        const shrinkWrap = new THREE.Mesh(wrapGeometry, wrapMaterial);
+        shrinkWrap.position.set(0, 3.25, 0);
+        
+        const edgeGeomLeft = new THREE.CylinderGeometry(0.95, 0.95, 6.7, 32);
+        const edgeLeft = new THREE.Mesh(edgeGeomLeft, wrapMaterial);
+        edgeLeft.position.set(-0.95, 3.25, 0);
+        batteryPack.add(edgeLeft);
+        
+        const edgeGeomRight = new THREE.CylinderGeometry(0.95, 0.95, 6.7, 32);
+        const edgeRight = new THREE.Mesh(edgeGeomRight, wrapMaterial);
+        edgeRight.position.set(0.95, 3.25, 0);
+        batteryPack.add(edgeRight);
+
+        const centerBlockGeom = new THREE.BoxGeometry(1.9, 6.7, 1.9);
+        const centerBlock = new THREE.Mesh(centerBlockGeom, wrapMaterial);
+        centerBlock.position.set(0, 3.25, 0);
+        batteryPack.add(centerBlock);
+
+        // BMS PCB
+        const bmsGeometry = new THREE.BoxGeometry(3.4, 0.15, 1.4);
+        const bmsMaterial = new THREE.MeshStandardMaterial({ color: 0x002200, roughness: 0.8 }); 
+        const bmsBoard = new THREE.Mesh(bmsGeometry, bmsMaterial);
+        bmsBoard.position.set(0, 6.75, 0);
+        batteryPack.add(bmsBoard);
+
+        // BMS LED
+        const bmsIndicatorGeom = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        bmsIndicatorMaterial = new THREE.MeshBasicMaterial({ color: 0x00d2ff }); 
+        const bmsIndicator = new THREE.Mesh(bmsIndicatorGeom, bmsIndicatorMaterial);
+        bmsIndicator.position.set(1.4, 6.85, 0.4);
+        batteryPack.add(bmsIndicator);
+
+        // Wires
+        const redCurve = new THREE.CatmullRomCurve3([
+            new THREE.Vector3(1, 6.8, 0),
+            new THREE.Vector3(1, 7.5, 0.5),
+            new THREE.Vector3(2, 8.5, 1.5),
+            new THREE.Vector3(3.5, 8.0, 2)
+        ]);
+        const wireGeometry = new THREE.TubeGeometry(redCurve, 20, 0.08, 8, false);
+        const redMaterial = new THREE.MeshStandardMaterial({ color: 0xcc0000, roughness: 0.4 });
+        const redWire = new THREE.Mesh(wireGeometry, redMaterial);
+        batteryPack.add(redWire);
+
+        const blackCurve = new THREE.CatmullRomCurve3([
+            new THREE.Vector3(-1, 6.8, 0),
+            new THREE.Vector3(-1, 7.5, -0.5),
+            new THREE.Vector3(1, 8.5, 1),
+            new THREE.Vector3(3.5, 8.0, 1.7)
+        ]);
+        const blackGeometry = new THREE.TubeGeometry(blackCurve, 20, 0.08, 8, false);
+        const blackMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.4 });
+        const blackWire = new THREE.Mesh(blackGeometry, blackMaterial);
+        batteryPack.add(blackWire);
+
+        // JST Connector
+        const connectorGeom = new THREE.BoxGeometry(0.8, 0.4, 0.7);
+        const connectorMat = new THREE.MeshStandardMaterial({ color: 0xdd0000, roughness: 0.7 });
+        const connector = new THREE.Mesh(connectorGeom, connectorMat);
+        connector.position.set(3.7, 7.95, 1.85);
+        connector.rotation.z = -Math.PI / 8;
+        connector.rotation.y = -Math.PI / 16;
+        batteryPack.add(connector);
+
+        scene.add(batteryPack);
+
+        // Styling the floor environment specifically for Darayar
+        const gridHelper = new THREE.GridHelper(30, 30, 0x00d2ff, 0x334155);
+        gridHelper.position.y = -0.01;
+        gridHelper.material.opacity = 0.15;
+        gridHelper.material.transparent = true;
+        scene.add(gridHelper);
+
+        const floorGeometry = new THREE.PlaneGeometry(30, 30);
+        const floorMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x0f172a, // Matches Tailwind dark-bg
+            roughness: 0.4, 
+            metalness: 0.1 
+        });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // Handle Resize specific to container
+        window.addEventListener('resize', onWindowResize, false);
+        function onWindowResize() {
+            if(!container) return;
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        let autoRotate = true;
+        
+        container.addEventListener('mousedown', () => autoRotate = false);
+        container.addEventListener('touchstart', () => autoRotate = false, {passive: true});
+
+        window.onload = function() {
+            updateUI(); 
+            
+            function animate() {
+                requestAnimationFrame(animate);
+
+                if (autoRotate) {
+                    batteryPack.rotation.y += 0.0025;
+                    batteryPack.position.y = Math.sin(Date.now() * 0.0015) * 0.15; 
+                } else {
+                    batteryPack.position.y += (0 - batteryPack.position.y) * 0.1;
+                }
+                
+                if (batterySim.state === 'discharging') {
+                    batteryPack.position.x = (Math.random() - 0.5) * 0.04;
+                    batteryPack.position.z = (Math.random() - 0.5) * 0.04;
+                } else {
+                    batteryPack.position.x += (0 - batteryPack.position.x) * 0.1;
+                    batteryPack.position.z += (0 - batteryPack.position.z) * 0.1;
+                }
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        };
+    </script>
+</body>
+</html>
